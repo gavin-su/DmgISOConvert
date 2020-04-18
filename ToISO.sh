@@ -1,14 +1,24 @@
+#!/bin/bash
 
+if [ $# != 2 ] ; then
+    echo "USAGE: $0 macos dmg_path"
+    echo " e.g.: $0 Catalina /tmp/Catalina.dmg"
+    exit 1;
+fi
 
+MACOS=$1
+DMGPATH=$2
 
-hdiutil create -o /tmp/Catalina -size 9000m -layout SPUD -fs HFS+J
+hdiutil create -o /tmp/${MACOS} -size 9000m -layout SPUD -fs HFS+J
 
-hdiutil attach /tmp/Catalina.dmg -noverify -mountpoint /Volumes/install_build
+hdiutil attach ${DMGPATH} -noverify -mountpoint /Volumes/install_build
 
-sudo /Applications/Install\ macOS\ Catalina.app/Contents/Resources/createinstallmedia --volume /Volumes/install_build
+#sudo /Applications/Install\ macOS\ ${MACOS}.app/Contents/Resources/createinstallmedia --volume /Volumes/install_build
+sudo /Volumes/install_build/Install\ macOS\ ${MACOS}.app/Contents/Resources/createinstallmedia --volume /Volumes/install_build
 
-hdiutil detach /Volumes/Install\ macOS\ Catalina
+#hdiutil detach /Volumes/Install\ macOS\ ${MACOS}
+hdiutil detach /Volumes/install_build
 
-hdiutil convert /tmp/Catalina.dmg -format UDTO -o ~/Downloads/Catalina
+hdiutil convert ${DMGPATH} -format UDTO -o ~/Downloads/${MACOS}
 
-mv ~/Downloads/Catalina.cdr ~/Downloads/Catalina.iso
+mv ~/Downloads/${MACOS}.cdr ~/Downloads/${MACOS}.iso
