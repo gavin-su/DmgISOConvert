@@ -10,16 +10,46 @@ MACOS=$1
 DMGFILE=$2
 OUTDIR=$3
 
+case ${MACOS} in
+    Catalina)
+    ;;
+    Mojave)
+    ;;
+    "High Sierra")
+    ;;
+    Sierra)
+    ;;
+    "El Capitan")
+    ;;
+    Yosemite)
+    ;;
+    *)
+    echo "ERROR!!! THIS MACOS IS NOT SUPPORT!!!"
+    exit 1;
+esac
+
 hdiutil create -o /tmp/${MACOS} -size 9000m -layout SPUD -fs HFS+J
 TMPFILE="/tmp/${MACOS}.dmg"
-hdiutil attach ${TMPFILE} -noverify -mountpoint /Volumes/${MACOS}
+hdiutil attach ${TMPFILE} -noverify -mountpoint "/Volumes/${MACOS}"
 
 hdiutil attach ${DMGFILE} -mountpoint /Volumes/os
 APP=`ls -1 /Volumes/os | grep \.app | grep Install`
 
-#sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume --applicationpath /Applications/Install\ OS\ X\ El\ Capitan.app
-#sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume --applicationpath /Applications/Install\ macOS\ Sierra.app
-sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume /Volumes/${MACOS} --nointeraction
+
+case ${MACOS} in
+    Sierra)
+    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ macOS\ Sierra.app --nointeraction
+    ;;
+    "El Capitan")
+    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ OS\ X\ El\ Capitan.app -nointeraction 
+    ;;
+    Yosemite)
+    ;;
+    *)
+    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --nointeraction
+    ;;
+esac
+
 
 INSTVOL=`ls -1 /Volumes | grep Install`
 hdiutil detach /Volumes/${INSTVOL}
