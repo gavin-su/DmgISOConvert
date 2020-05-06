@@ -10,6 +10,7 @@ MACOS=$1
 DMGFILE=$2
 OUTDIR=$3
 
+#check
 case ${MACOS} in
     Catalina)
     ;;
@@ -28,6 +29,19 @@ case ${MACOS} in
     exit 1;
 esac
 
+if [ ! -e "${DMGFILE}" ]
+then
+    echo "ERROR!!! ${DMGFILE} NOT FOUND!!!"
+    exit 1;
+fi
+
+if [ ! -d "${OUTDIR}" ]
+then
+    echo "ERROR!!! ${OUTDIR} NOT FOUND!!!"
+    exit 1;
+fi
+
+#convert
 hdiutil create -o /tmp/${MACOS} -size 9000m -layout SPUD -fs HFS+J
 TMPFILE="/tmp/${MACOS}.dmg"
 hdiutil attach ${TMPFILE} -noverify -mountpoint "/Volumes/${MACOS}"
@@ -57,4 +71,6 @@ hdiutil detach /Volumes/os
 
 hdiutil convert ${TMPFILE} -format UDTO -o ${OUTDIR}/${MACOS}.cdr
 mv ${OUTDIR}/${MACOS}.cdr ${OUTDIR}/${MACOS}.iso
+
+#clean
 rm ${TMPFILE}
