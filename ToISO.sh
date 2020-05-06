@@ -52,21 +52,21 @@ APP=`ls -1 /Volumes/os | grep \.app | grep Install`
 
 case ${MACOS} in
     Sierra)
-    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ macOS\ Sierra.app --nointeraction
+    sudo "/Volumes/os/${APP}/Contents/Resources/createinstallmedia"  --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ macOS\ Sierra.app --nointeraction
     ;;
     "El Capitan")
-    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ OS\ X\ El\ Capitan.app -nointeraction 
+    sudo "/Volumes/os/${APP}/Contents/Resources/createinstallmedia"  --volume "/Volumes/${MACOS}" --applicationpath /Applications/Install\ OS\ X\ El\ Capitan.app -nointeraction 
     ;;
     Yosemite)
     ;;
     *)
-    sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume "/Volumes/${MACOS}" --nointeraction
+    sudo "/Volumes/os/${APP}/Contents/Resources/createinstallmedia" --volume "/Volumes/${MACOS}" --nointeraction
     ;;
 esac
 
 
 INSTVOL=`ls -1 /Volumes | grep Install`
-hdiutil detach /Volumes/${INSTVOL}
+hdiutil detach "/Volumes/${INSTVOL}"
 hdiutil detach /Volumes/os
 
 hdiutil convert ${TMPFILE} -format UDTO -o ${OUTDIR}/${MACOS}.cdr
