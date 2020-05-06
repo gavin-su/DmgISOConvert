@@ -21,7 +21,8 @@ APP=`ls -1 /Volumes/os | grep \.app | grep Install`
 #sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume --applicationpath /Applications/Install\ macOS\ Sierra.app
 sudo /Volumes/os/${APP}/Contents/Resources/createinstallmedia --volume /Volumes/${MACOS} --nointeraction
 
-hdiutil detach /Volumes/Install\ macOS\ ${MACOS}
+INSTVOL=`ls -1 /Volumes | grep Install`
+hdiutil detach /Volumes/${INSTVOL}
 hdiutil detach /Volumes/os
 
 hdiutil convert ${TMPFILE} -format UDTO -o ${OUTDIR}/${MACOS}.cdr
